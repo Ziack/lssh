@@ -4,13 +4,13 @@ PREFIX?=/usr/local
 # What to run to install various files
 INSTALL?=install
 # Run to install the actual binary
-INSTALL_PROGRAM=$(INSTALL) -Dm 755
+INSTALL_PROGRAM=$(INSTALL) -m 755
 # Run to install application data, with differing permissions
-INSTALL_DATA=$(INSTALL) -Dm 644
+INSTALL_DATA=$(INSTALL) -m 644
 
 # Directories into which to install the various files
 bindir=$(DESTDIR)$(PREFIX)/bin
-sharedir=$(DESTDIR)$(PREFIX)/share
+mandir=$(DESTDIR)$(PREFIX)/share/man/man1
 
 help:
 	@echo "targets:"
@@ -19,11 +19,13 @@ help:
 	| column -t  -s '|'
 
 install: lssh lssh.1 ## system install
+	@mkdir -p $(bindir)
+	@mkdir -p $(mandir)
 	$(INSTALL_PROGRAM) lssh $(bindir)/lssh
-	$(INSTALL_DATA) lssh.1 $(sharedir)/man/man1/lssh.1
+	$(INSTALL_DATA) lssh.1 $(mandir)/lssh.1
 
 uninstall: ## system uninstall
 	rm -f $(bindir)/lssh
-	rm -f $(sharedir)/man/man1/lssh.1
+	rm -f $(mandir)/lssh.1
 
 .PHONY: install uninstall
